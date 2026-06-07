@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Users/fnaf1/Downloads/index_7.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Генератор объявлений аренды</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=PT+Sans:wght@400;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'PT Sans', sans-serif; background: #f5f0e8; min-height: 100vh; padding: 32px 16px; color: #1a1a1a; }
+  .container { max-width: 680px; margin: 0 auto; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 30px; color: #1a1a1a; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #999; margin-bottom: 28px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .card { background: #fff; border: 1px solid #e0d8cc; padding: 28px; margin-bottom: 16px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: #b5813a; margin-bottom: 18px; padding-bottom: 8px; border-bottom: 1px solid #f0e8d8; }
+  .field-row { display: grid; gap: 14px; margin-bottom: 14px; }
+  .cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-1 { grid-template-columns: 1fr; }
+  label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #999; margin-bottom: 6px; }
+  input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; font-family: 'PT Sans', sans-serif; font-size: 14px; color: #1a1a1a; background: #fafaf8; outline: none; transition: border-color 0.2s; }
+  input:focus, select:focus, textarea:focus { border-color: #b5813a; background: #fff; }
+  textarea { resize: vertical; min-height: 80px; }
+  .platform-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .platform-btn { padding: 10px; border: 1px solid #ddd; background: #fafaf8; cursor: pointer; text-align: center; font-family: 'PT Sans', sans-serif; font-size: 13px; color: #666; transition: all 0.2s; user-select: none; }
+  .platform-btn.active { border-color: #b5813a; background: #fdf6ec; color: #b5813a; font-weight: 700; }
+  .generate-btn { width: 100%; padding: 14px; background: #1a1a1a; color: #fff; border: none; font-family: 'Playfair Display', serif; font-size: 16px; cursor: pointer; transition: background 0.2s; letter-spacing: 0.02em; }
+  .generate-btn:hover { background: #333; }
+  .generate-btn:disabled { background: #aaa; cursor: not-allowed; }
+  .result-card { background: #fff; border: 1px solid #e0d8cc; padding: 28px; margin-top: 16px; display: none; }
+  .result-card.visible { display: block; }
+  .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid #f0e8d8; }
+  .result-platform { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #b5813a; }
+  .copy-btn { padding: 6px 14px; border: 1px solid #ddd; background: transparent; font-family: 'PT Sans', sans-serif; font-size: 12px; cursor: pointer; color: #666; transition: all 0.2s; }
+  .copy-btn:hover { border-color: #b5813a; color: #b5813a; }
+  .result-text { font-size: 14px; line-height: 1.75; color: #333; white-space: pre-wrap; }
+  .loading { display: flex; align-items: center; gap: 12px; padding: 16px 0; color: #999; font-size: 14px; }
+  .dots span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #b5813a; margin-right: 3px; animation: bounce 1.2s infinite; }
+  .dots span:nth-child(2) { animation-delay: 0.2s; }
+  .dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce { 0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+  @media (max-width: 480px) { .cols-3 { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Генератор объявлений</h1>
+  <p class="subtitle">Коммерческая аренда · ЦИАН, Авито, E-mail</p>
+
+  <div class="card">
+    <div class="section-title">Параметры помещения</div>
+    <div class="field-row cols-3">
+      <div>
+        <label>Тип</label>
+        <select id="type">
+          <option>Офис</option>
+          <option>Торговое</option>
+          <option>Свободное назначение</option>
+          <option>Склад</option>
+          <option>Производственное</option>
+          <option>Квартира</option>
+          <option>Гараж</option>
+        </select>
+      </div>
+      <div>
+        <label>Площадь, м²</label>
+        <input type="text" id="area" placeholder="68">
+      </div>
+      <div>
+        <label>Ставка ₽/м²/мес</label>
+        <input type="text" id="rate" placeholder="1200">
+      </div>
+    </div>
+    <div class="field-row cols-1">
+      <div>
+        <label>Адрес</label>
+        <input type="text" id="address" placeholder="пр. Кирова 51а, Томск">
+      </div>
+    </div>
+    <div class="field-row cols-2">
+      <div>
+        <label>Этаж / вход</label>
+        <input type="text" id="floor" placeholder="1-й, отдельный вход">
+      </div>
+      <div>
+        <label>Состояние</label>
+        <select id="condition">
+          <option>Под ключ</option>
+          <option>Свежий ремонт</option>
+          <option>Дизайнерский ремонт</option>
+          <option>Базовая отделка</option>
+          <option>Требует ремонта</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-row cols-1">
+      <div>
+        <label>Ключевые преимущества</label>
+        <textarea id="features" placeholder="отдельный вход с улицы, витринные окна, парковка, бизнес-центр класса А, рядом остановки"></textarea>
+      </div>
+    </div>
+    <div class="field-row cols-1">
+      <div>
+        <label>Целевой арендатор (необязательно)</label>
+        <input type="text" id="target" placeholder="медклиника, юрфирма, шоурум...">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Площадка</div>
+    <div class="platform-grid" id="platforms">
+      <div class="platform-btn active" data-val="ЦИАН">ЦИАН</div>
+      <div class="platform-btn" data-val="Авито">Авито</div>
+      <div class="platform-btn" data-val="email">E-mail</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">API-ключ OpenRouter</div>
+    <div class="field-row cols-1">
+      <div>
+        <label>Ключ (sk-or-v1-...)</label>
+        <input type="password" id="apiKey" placeholder="Вставьте ваш ключ OpenRouter">
+      </div>
+    </div>
+  </div>
+
+  <button class="generate-btn" id="genBtn">Сгенерировать →</button>
+
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <span class="result-platform" id="resultLabel">ЦИАН</span>
+      <button class="copy-btn" id="copyBtn">Скопировать</button>
+    </div>
+    <div class="loading" id="loading" style="display:none">
+      <div class="dots"><span></span><span></span><span></span></div>
+      Генерирую текст...
+    </div>
+    <div class="result-text" id="resultText"></div>
+  </div>
+</div>
+
+<script>
+let selectedPlatform = 'ЦИАН';
+
+document.querySelectorAll('.platform-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedPlatform = btn.dataset.val;
+  });
+});
+
+document.getElementById('genBtn').addEventListener('click', generate);
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const text = document.getElementById('resultText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = 'Скопировано ✓';
+    setTimeout(() => btn.textContent = 'Скопировать', 2000);
+  });
+});
+
+async function generate() {
+  const apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) {
+    alert('Введите API-ключ OpenRouter');
+    return;
+  }
+
+  const area = document.getElementById('area').value || '—';
+  const rate = document.getElementById('rate').value || '—';
+  const address = document.getElementById('address').value || '—';
+  const floor = document.getElementById('floor').value || '—';
+  const type = document.getElementById('type').value;
+  const condition = document.getElementById('condition').value;
+  const features = document.getElementById('features').value || '—';
+  const target = document.getElementById('target').value;
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true;
+
+  const resultCard = document.getElementById('resultCard');
+  resultCard.classList.add('visible');
+  document.getElementById('loading').style.display = 'flex';
+  document.getElementById('resultText').textContent = '';
+  document.getElementById('resultLabel').textContent = selectedPlatform.toUpperCase();
+
+  const instructions = {
+    'ЦИАН': 'Напиши объявление для раздела "Коммерческая недвижимость" на ЦИАН. Деловой, конкретный стиль. Заголовок до 60 символов, описание 150–200 слов с разбивкой на абзацы. Без лишних восклицательных знаков.',
+    'Авито': 'Напиши объявление для Авито. Живой, практичный тон. Заголовок цепляющий. Описание 120–160 слов. Акцент на выгоде. Можно использовать 1–2 эмодзи в начале абзацев.',
+    'email': `Напиши холодное коммерческое письмо${target ? ` потенциальному арендатору (${target})` : ''}. Формат: тема письма + текст. 120–150 слов. Персональный тон, конкретное предложение, призыв к действию — позвонить или приехать посмотреть.`
+  };
+
+  const prompt = `${instructions[selectedPlatform]}
+
+Объект:
+- Тип: ${type}
+- Адрес: ${address}
+- Площадь: ${area} м²
+- Ставка: ${rate} ₽/м²/мес
+- Этаж/вход: ${floor}
+- Состояние: ${condition}
+- Преимущества: ${features}
+${target ? `- Целевой арендатор: ${target}` : ''}
+
+Только готовый текст, без пояснений. На русском языке.`;
+
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+        
+        'X-Title': 'Rental Ad Generator'
+      },
+      body: JSON.stringify({
+        model: 'deepseek/deepseek-r1:free',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content || ('API: ' + JSON.stringify(data));
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('resultText').textContent = text;
+  } catch (e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('resultText').textContent = 'Ошибка: ' + (e.message || String(e));
+  }
+
+  btn.disabled = false;
+}
+</script>
+
+
+
+
+
+</body></html>
